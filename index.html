@@ -13,37 +13,38 @@
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #ffffff;
-            color: #1f2937;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #090d16 100%);
+            color: #f8fafc;
+            min-height: 100vh;
         }
         .active-tab {
-            border-bottom: 3px solid #2563eb;
-            color: #2563eb;
+            border-bottom: 3px solid #3b82f6;
+            color: #60a5fa;
             font-weight: 600;
         }
     </style>
 </head>
-<body class="bg-white min-h-screen flex flex-col">
+<body class="flex flex-col">
 
     <!-- Header / Navigation Bar -->
-    <header class="border-b border-gray-200 bg-white sticky top-0 z-50 shadow-sm">
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-55 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo & Team Name -->
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xl font-bold">
+                    <div class="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-blue-500/30">
                         N
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-gray-900 leading-tight">ตารางซ้อม NEXER 22641</h1>
-                        <p class="text-xs text-gray-500">ระบบติดตามวันซ้อมและการลาทีม</p>
+                        <h1 class="text-xl font-bold text-white leading-tight">ตารางซ้อม NEXER 22641</h1>
+                        <p class="text-xs text-slate-400">ระบบติดตามวันซ้อมและการลาทีม</p>
                     </div>
                 </div>
 
                 <!-- Refresh Button & Status Indicator -->
                 <div class="flex items-center space-x-4">
-                    <span id="lastUpdated" class="text-xs text-gray-400 hidden sm:inline-block">อัปเดตล่าสุด: -</span>
-                    <button id="refreshBtn" onclick="fetchData()" class="flex items-center space-x-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-md transition duration-150">
+                    <span id="lastUpdated" class="text-xs text-slate-400 hidden sm:inline-block">อัปเดตล่าสุด: -</span>
+                    <button id="refreshBtn" onclick="fetchData()" class="flex items-center space-x-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium rounded-md border border-slate-700 transition duration-150 shadow-sm">
                         <i id="refreshIcon" class="fas fa-sync-alt"></i>
                         <span>อัปเดตข้อมูล</span>
                     </button>
@@ -52,16 +53,16 @@
 
             <!-- Navigation Tabs -->
             <nav class="flex space-x-8 -mb-px mt-2 overflow-x-auto">
-                <button onclick="switchTab('today')" id="tab-today" class="py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 whitespace-nowrap active-tab">
+                <button onclick="switchTab('today')" id="tab-today" class="py-3 px-1 text-sm font-medium text-slate-400 hover:text-slate-200 whitespace-nowrap active-tab">
                     <i class="fas fa-calendar-day mr-2"></i>วันนี้ (Mainหลัก)
                 </button>
-                <button onclick="switchTab('schedule')" id="tab-schedule" class="py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                <button onclick="switchTab('schedule')" id="tab-schedule" class="py-3 px-1 text-sm font-medium text-slate-400 hover:text-slate-200 whitespace-nowrap">
                     <i class="fas fa-calendar-alt mr-2"></i>ตารางซ้อมปัจจุบัน/อนาคต
                 </button>
-                <button onclick="switchTab('calendar')" id="tab-calendar" class="py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                <button onclick="switchTab('calendar')" id="tab-calendar" class="py-3 px-1 text-sm font-medium text-slate-400 hover:text-slate-200 whitespace-nowrap">
                     <i class="fas fa-calendar-grid mr-2"></i>มุมมองปฏิทิน
                 </button>
-                <button onclick="switchTab('history')" id="tab-history" class="py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                <button onclick="switchTab('history')" id="tab-history" class="py-3 px-1 text-sm font-medium text-slate-400 hover:text-slate-200 whitespace-nowrap">
                     <i class="fas fa-history mr-2"></i>ประวัติการซ้อมย้อนหลัง
                 </button>
             </nav>
@@ -73,47 +74,47 @@
         
         <!-- Loading State -->
         <div id="loading" class="flex flex-col items-center justify-center py-20">
-            <i class="fas fa-circle-notch fa-spin text-4xl text-blue-600 mb-4"></i>
-            <p class="text-gray-500 text-base font-medium">กำลังดึงข้อมูล Real-time จาก Google Sheet...</p>
+            <i class="fas fa-circle-notch fa-spin text-4xl text-blue-500 mb-4"></i>
+            <p class="text-slate-400 text-base font-medium">กำลังดึงข้อมูล Real-time จาก Google Sheet...</p>
         </div>
 
         <!-- Section 1: หน้าวันนี้ (Main หลัก) -->
         <section id="page-today" class="space-y-6 hidden">
             <!-- Today Highlight Card -->
-            <div id="todayHighlightCard" class="bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-100 rounded-2xl p-6 sm:p-8 shadow-sm">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-blue-100 pb-4 mb-6">
+            <div id="todayHighlightCard" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl backdrop-blur-sm">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-slate-800 pb-4 mb-6">
                     <div>
-                        <span id="todayBadge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-600 text-white mb-2">วันนี้</span>
-                        <h2 id="todayDateStr" class="text-2xl sm:text-3xl font-bold text-gray-900">-</h2>
+                        <span id="todayBadge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-600 text-white mb-2 shadow-sm">วันนี้</span>
+                        <h2 id="todayDateStr" class="text-2xl sm:text-3xl font-bold text-white">-</h2>
                     </div>
-                    <div class="bg-white px-4 py-3 rounded-xl border border-blue-100 shadow-sm text-center">
-                        <span class="text-xs text-gray-500 block">สถานะการซ้อมวันนี้</span>
-                        <span id="todayPracticeStatus" class="text-lg font-bold text-blue-600">-</span>
+                    <div class="bg-slate-800/80 px-4 py-3 rounded-xl border border-slate-700 text-center shadow-inner">
+                        <span class="text-xs text-slate-400 block">สถานะการซ้อมวันนี้</span>
+                        <span id="todayPracticeStatus" class="text-lg font-bold text-blue-400">-</span>
                     </div>
                 </div>
 
                 <!-- Today Leave Details -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Full Day Leave -->
-                    <div class="bg-white rounded-xl p-5 border border-red-100 shadow-sm">
-                        <div class="flex items-center space-x-2 text-red-600 font-semibold mb-3">
+                    <div class="bg-slate-800/60 rounded-xl p-5 border border-red-900/50 shadow-sm">
+                        <div class="flex items-center space-x-2 text-red-400 font-semibold mb-3">
                             <i class="fas fa-user-times"></i>
                             <span>ผู้ลา (ทั้งวัน)</span>
                         </div>
-                        <div id="todayFullLeaveNames" class="text-lg font-bold text-gray-800 mb-2">ไม่มีผู้ลา</div>
-                        <div class="text-xs text-gray-500 font-semibold mb-1">หมายเหตุ:</div>
-                        <p id="todayFullLeaveNote" class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100">-</p>
+                        <div id="todayFullLeaveNames" class="text-lg font-bold text-white mb-2">ไม่มีผู้ลา</div>
+                        <div class="text-xs text-slate-400 font-semibold mb-1">หมายเหตุ:</div>
+                        <p id="todayFullLeaveNote" class="text-sm text-slate-300 bg-slate-900/50 p-3 rounded-lg border border-slate-800">-</p>
                     </div>
 
-                    <!-- Partial Leave (เปลี่ยนเป็นโทนสีฟ้า Sky/Blue) -->
-                    <div class="bg-white rounded-xl p-5 border border-sky-200 shadow-sm">
-                        <div class="flex items-center space-x-2 text-sky-600 font-semibold mb-3">
+                    <!-- Partial Leave -->
+                    <div class="bg-slate-800/60 rounded-xl p-5 border border-sky-900/50 shadow-sm">
+                        <div class="flex items-center space-x-2 text-sky-400 font-semibold mb-3">
                             <i class="fas fa-user-clock"></i>
                             <span>ผู้ลา (เจาะจงช่วงเวลา)</span>
                         </div>
-                        <div id="todayPartLeaveNames" class="text-lg font-bold text-gray-800 mb-2">ไม่มีผู้ลา</div>
-                        <div class="text-xs text-gray-500 font-semibold mb-1">หมายเหตุ:</div>
-                        <p id="todayPartLeaveNote" class="text-sm text-gray-600 bg-sky-50/50 p-3 rounded-lg border border-sky-100">-</p>
+                        <div id="todayPartLeaveNames" class="text-lg font-bold text-white mb-2">ไม่มีผู้ลา</div>
+                        <div class="text-xs text-slate-400 font-semibold mb-1">หมายเหตุ:</div>
+                        <p id="todayPartLeaveNote" class="text-sm text-slate-300 bg-slate-900/50 p-3 rounded-lg border border-slate-800">-</p>
                     </div>
                 </div>
             </div>
@@ -122,13 +123,13 @@
         <!-- Section 2: ตารางซ้อม ปัจจุบัน / อนาคต -->
         <section id="page-schedule" class="hidden">
             <div class="mb-4 flex justify-between items-center">
-                <h2 class="text-xl font-bold text-gray-900">ตารางซ้อมตั้งแต่วันนี้เป็นต้นไป</h2>
-                <span id="upcomingCount" class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">0 รายการ</span>
+                <h2 class="text-xl font-bold text-white">ตารางซ้อมตั้งแต่วันนี้เป็นต้นไป</h2>
+                <span id="upcomingCount" class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700">0 รายการ</span>
             </div>
-            <div class="overflow-x-auto bg-white border border-gray-200 rounded-xl shadow-sm">
+            <div class="overflow-x-auto bg-slate-900/90 border border-slate-800 rounded-xl shadow-xl">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <tr class="bg-slate-800/80 border-b border-slate-700 text-xs font-semibold text-slate-300 uppercase tracking-wider">
                             <th class="py-3 px-4">วันที่ / วัน</th>
                             <th class="py-3 px-4">สถานะการซ้อม</th>
                             <th class="py-3 px-4">ผู้ลาทั้งวัน</th>
@@ -137,7 +138,7 @@
                             <th class="py-3 px-4">หมายเหตุ</th>
                         </tr>
                     </thead>
-                    <tbody id="scheduleTableBody" class="divide-y divide-gray-200 text-sm">
+                    <tbody id="scheduleTableBody" class="divide-y divide-slate-800 text-sm">
                         <!-- Data will be populated here -->
                     </tbody>
                 </table>
@@ -146,22 +147,22 @@
 
         <!-- Section 3: ระบบปฏิทิน Calendar -->
         <section id="page-calendar" class="hidden">
-            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-xl">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 id="calendarMonthYear" class="text-xl font-bold text-gray-900">ปฏิทินซ้อม</h2>
+                    <h2 id="calendarMonthYear" class="text-xl font-bold text-white">ปฏิทินซ้อม</h2>
                     <div class="flex space-x-2">
-                        <button onclick="changeMonth(-1)" class="p-2 border rounded-lg hover:bg-gray-50"><i class="fas fa-chevron-left"></i></button>
-                        <button onclick="changeMonth(1)" class="p-2 border rounded-lg hover:bg-gray-50"><i class="fas fa-chevron-right"></i></button>
+                        <button onclick="changeMonth(-1)" class="p-2 border border-slate-700 bg-slate-800 rounded-lg hover:bg-slate-700 text-slate-200"><i class="fas fa-chevron-left"></i></button>
+                        <button onclick="changeMonth(1)" class="p-2 border border-slate-700 bg-slate-800 rounded-lg hover:bg-slate-700 text-slate-200"><i class="fas fa-chevron-right"></i></button>
                     </div>
                 </div>
-                <div class="grid grid-cols-7 gap-2 text-center font-semibold text-gray-500 text-xs mb-2">
-                    <div class="text-red-500">อา.</div>
+                <div class="grid grid-cols-7 gap-2 text-center font-semibold text-slate-400 text-xs mb-2">
+                    <div class="text-red-400">อา.</div>
                     <div>จ.</div>
                     <div>อ.</div>
                     <div>พ.</div>
                     <div>พฤ.</div>
                     <div>ศ.</div>
-                    <div class="text-blue-500">ส.</div>
+                    <div class="text-blue-400">ส.</div>
                 </div>
                 <div id="calendarGrid" class="grid grid-cols-7 gap-2">
                     <!-- Calendar days will be rendered here -->
@@ -172,13 +173,13 @@
         <!-- Section 4: ประวัติย้อนหลัง History -->
         <section id="page-history" class="hidden">
             <div class="mb-4 flex justify-between items-center">
-                <h2 class="text-xl font-bold text-gray-900">ประวัติการซ้อมย้อนหลัง (เมื่อวานลงไป)</h2>
-                <span id="historyCount" class="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">0 รายการ</span>
+                <h2 class="text-xl font-bold text-white">ประวัติการซ้อมย้อนหลัง (เมื่อวานลงไป)</h2>
+                <span id="historyCount" class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700">0 รายการ</span>
             </div>
-            <div class="overflow-x-auto bg-white border border-gray-200 rounded-xl shadow-sm">
+            <div class="overflow-x-auto bg-slate-900/90 border border-slate-800 rounded-xl shadow-xl">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <tr class="bg-slate-800/80 border-b border-slate-700 text-xs font-semibold text-slate-300 uppercase tracking-wider">
                             <th class="py-3 px-4">วันที่ / วัน</th>
                             <th class="py-3 px-4">สถานะการซ้อม</th>
                             <th class="py-3 px-4">ผู้ลาทั้งวัน</th>
@@ -187,7 +188,7 @@
                             <th class="py-3 px-4">หมายเหตุ</th>
                         </tr>
                     </thead>
-                    <tbody id="historyTableBody" class="divide-y divide-gray-200 text-sm text-gray-500">
+                    <tbody id="historyTableBody" class="divide-y divide-slate-800 text-sm text-slate-400">
                         <!-- Data will be populated here -->
                     </tbody>
                 </table>
@@ -197,8 +198,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-200 bg-white py-4 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-400">
+    <footer class="border-t border-slate-800 bg-slate-900/80 py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
             © NEXER 22641 Training Schedule App • Real-time Sync with Google Sheets
         </div>
     </footer>
@@ -209,13 +210,11 @@
         let rawData = [];
         let currentCalDate = new Date();
 
-        // Month Mapping for Thai Date Parsing
         const thaiMonths = {
             'ม.ค.': 0, 'ก.พ.': 1, 'มี.ค.': 2, 'เม.ย.': 3, 'พ.ค.': 4, 'มิ.ย.': 5,
             'ก.ค.': 6, 'ส.ค.': 7, 'ก.ย.': 8, 'ต.ค.': 9, 'พ.ย.': 10, 'ธ.ค.': 11
         };
 
-        // Convert Thai Date format (e.g., "28 ก.ย. 69") to JS Date Object
         function parseThaiDate(dateStr) {
             if (!dateStr) return null;
             const parts = dateStr.trim().split(/\s+/);
@@ -225,7 +224,6 @@
             const monthStr = parts[1];
             let year = parseInt(parts[2], 10);
 
-            // Convert Buddhist Era (2569 / 69) to AD Year
             if (year < 100) year += 2500;
             year -= 543;
 
@@ -235,7 +233,6 @@
             return new Date(year, month, day);
         }
 
-        // CSV Parser Handling Quotes and Commas
         function parseCSV(text) {
             const lines = text.split('\n');
             const result = [];
@@ -264,7 +261,6 @@
             return result;
         }
 
-        // Fetch Data from Google Sheets
         async function fetchData() {
             const refreshIcon = document.getElementById('refreshIcon');
             refreshIcon.classList.add('fa-spin');
@@ -275,7 +271,6 @@
                 const csvText = await response.text();
                 const parsedRows = parseCSV(csvText);
 
-                // Filter valid data rows (Skip Header)
                 rawData = [];
                 for (let i = 1; i < parsedRows.length; i++) {
                     const row = parsedRows[i];
@@ -296,7 +291,6 @@
                     }
                 }
 
-                // Sort data by Date ascending
                 rawData.sort((a, b) => a.dateObj - b.dateObj);
 
                 renderTodayPage();
@@ -316,12 +310,10 @@
             }
         }
 
-        // Filter and Render Today's Data
         function renderTodayPage() {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
-            // Search for today's entry
             const todayData = rawData.find(d => {
                 const dDate = new Date(d.dateObj);
                 dDate.setHours(0, 0, 0, 0);
@@ -338,7 +330,6 @@
                 document.getElementById('todayPartLeaveNames').innerText = todayData.partLeaveNames || 'ไม่มีผู้ลาช่วงเวลา';
                 document.getElementById('todayPartLeaveNote').innerText = todayData.partLeaveNote || '-';
             } else {
-                // Default if today's date is not explicitly in sheet
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 document.getElementById('todayDateStr').innerText = today.toLocaleDateString('th-TH', options);
                 document.getElementById('todayPracticeStatus').innerText = 'ไม่มีข้อมูลการซ้อมสำหรับวันนี้';
@@ -349,7 +340,6 @@
             }
         }
 
-        // Render Current & Upcoming Practice Schedule
         function renderSchedulePage() {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -365,28 +355,27 @@
             tbody.innerHTML = '';
 
             if (upcoming.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-gray-400">ไม่มีรายการซ้อมในอนาคต</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">ไม่มีรายการซ้อมในอนาคต</td></tr>`;
                 return;
             }
 
             upcoming.forEach(d => {
                 const isToday = new Date(d.dateObj).setHours(0,0,0,0) === today.getTime();
                 const tr = document.createElement('tr');
-                if (isToday) tr.className = "bg-blue-50/50 font-medium";
+                if (isToday) tr.className = "bg-blue-950/40 font-medium";
 
                 tr.innerHTML = `
-                    <td class="py-3 px-4 font-semibold text-gray-900">${d.dateStr} <span class="text-xs font-normal text-gray-500">(${d.dayOfWeek})</span> ${isToday ? '<span class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full ml-1">วันนี้</span>' : ''}</td>
+                    <td class="py-3 px-4 font-semibold text-white">${d.dateStr} <span class="text-xs font-normal text-slate-400">(${d.dayOfWeek})</span> ${isToday ? '<span class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full ml-1">วันนี้</span>' : ''}</td>
                     <td class="py-3 px-4">${renderStatusBadge(d.status)}</td>
-                    <td class="py-3 px-4 font-medium text-red-600">${d.fullLeaveNames || '-'}</td>
-                    <td class="py-3 px-4 text-xs text-gray-600">${d.fullLeaveNote || '-'}</td>
-                    <td class="py-3 px-4 font-medium text-sky-600">${d.partLeaveNames || '-'}</td>
-                    <td class="py-3 px-4 text-xs text-gray-600">${d.partLeaveNote || '-'}</td>
+                    <td class="py-3 px-4 font-medium text-red-400">${d.fullLeaveNames || '-'}</td>
+                    <td class="py-3 px-4 text-xs text-slate-300">${d.fullLeaveNote || '-'}</td>
+                    <td class="py-3 px-4 font-medium text-sky-400">${d.partLeaveNames || '-'}</td>
+                    <td class="py-3 px-4 text-xs text-slate-300">${d.partLeaveNote || '-'}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // Render Historical Data (Yesterday and older)
         function renderHistoryPage() {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -395,39 +384,37 @@
                 const dDate = new Date(d.dateObj);
                 dDate.setHours(0, 0, 0, 0);
                 return dDate.getTime() < today.getTime();
-            }).reverse(); // Most recent history first
+            }).reverse();
 
             document.getElementById('historyCount').innerText = `${history.length} รายการ`;
             const tbody = document.getElementById('historyTableBody');
             tbody.innerHTML = '';
 
             if (history.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-gray-400">ไม่มีข้อมูลประวัติย้อนหลัง</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">ไม่มีข้อมูลประวัติย้อนหลัง</td></tr>`;
                 return;
             }
 
             history.forEach(d => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="py-3 px-4 font-medium text-gray-700">${d.dateStr} <span class="text-xs text-gray-400">(${d.dayOfWeek})</span></td>
+                    <td class="py-3 px-4 font-medium text-slate-300">${d.dateStr} <span class="text-xs text-slate-500">(${d.dayOfWeek})</span></td>
                     <td class="py-3 px-4">${renderStatusBadge(d.status)}</td>
-                    <td class="py-3 px-4 text-gray-600">${d.fullLeaveNames || '-'}</td>
-                    <td class="py-3 px-4 text-xs text-gray-500">${d.fullLeaveNote || '-'}</td>
-                    <td class="py-3 px-4 text-gray-600">${d.partLeaveNames || '-'}</td>
-                    <td class="py-3 px-4 text-xs text-gray-500">${d.partLeaveNote || '-'}</td>
+                    <td class="py-3 px-4 text-slate-400">${d.fullLeaveNames || '-'}</td>
+                    <td class="py-3 px-4 text-xs text-slate-500">${d.fullLeaveNote || '-'}</td>
+                    <td class="py-3 px-4 text-slate-400">${d.partLeaveNames || '-'}</td>
+                    <td class="py-3 px-4 text-xs text-slate-500">${d.partLeaveNote || '-'}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // Render Status Badges
         function renderStatusBadge(status) {
-            if (!status) return '<span class="px-2.5 py-1 text-xs rounded-md bg-green-50 text-green-700 border border-green-200">มีซ้อม</span>';
-            if (status.includes('งดซ้อม')) return `<span class="px-2.5 py-1 text-xs rounded-md bg-red-50 text-red-700 border border-red-200">${status}</span>`;
-            return `<span class="px-2.5 py-1 text-xs rounded-md bg-blue-50 text-blue-700 border border-blue-200">${status}</span>`;
+            if (!status) return '<span class="px-2.5 py-1 text-xs rounded-md bg-emerald-950/60 text-emerald-400 border border-emerald-800/60">มีซ้อม</span>';
+            if (status.includes('งดซ้อม')) return `<span class="px-2.5 py-1 text-xs rounded-md bg-red-950/60 text-red-400 border border-red-800/60">${status}</span>`;
+            return `<span class="px-2.5 py-1 text-xs rounded-md bg-blue-950/60 text-blue-400 border border-blue-800/60">${status}</span>`;
         }
 
-        // Render Calendar System
         function renderCalendar() {
             const grid = document.getElementById('calendarGrid');
             grid.innerHTML = '';
@@ -441,14 +428,12 @@
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-            // Blank cells for alignment
             for (let i = 0; i < firstDay; i++) {
                 const empty = document.createElement('div');
-                empty.className = "h-24 bg-gray-50 rounded-lg border border-dashed border-gray-200";
+                empty.className = "h-24 bg-slate-900/30 rounded-lg border border-dashed border-slate-800";
                 grid.appendChild(empty);
             }
 
-            // Days cells
             for (let day = 1; day <= daysInMonth; day++) {
                 const cellDate = new Date(year, month, day);
                 cellDate.setHours(0,0,0,0);
@@ -462,24 +447,24 @@
                 const isToday = cellDate.getTime() === new Date().setHours(0,0,0,0);
 
                 const cell = document.createElement('div');
-                cell.className = `h-24 p-2 rounded-lg border flex flex-col justify-between text-xs transition ${isToday ? 'border-blue-500 bg-blue-50/30' : 'border-gray-200 bg-white'}`;
+                cell.className = `h-24 p-2 rounded-lg border flex flex-col justify-between text-xs transition ${isToday ? 'border-blue-500 bg-blue-950/30' : 'border-slate-800 bg-slate-900/60'}`;
 
                 let statusContent = '';
                 if (dayData) {
                     if (dayData.status.includes('งดซ้อม')) {
-                        statusContent = `<div class="bg-red-100 text-red-700 p-1 rounded font-medium text-[10px] truncate">${dayData.status}</div>`;
+                        statusContent = `<div class="bg-red-950/80 text-red-400 border border-red-900/50 p-1 rounded font-medium text-[10px] truncate">${dayData.status}</div>`;
                     } else if (dayData.status) {
-                        statusContent = `<div class="bg-blue-100 text-blue-700 p-1 rounded font-medium text-[10px] truncate">${dayData.status}</div>`;
+                        statusContent = `<div class="bg-blue-950/80 text-blue-400 border border-blue-900/50 p-1 rounded font-medium text-[10px] truncate">${dayData.status}</div>`;
                     }
                     if (dayData.fullLeaveNames) {
-                        statusContent += `<div class="text-red-500 text-[10px] truncate">ลา: ${dayData.fullLeaveNames}</div>`;
+                        statusContent += `<div class="text-red-400 text-[10px] truncate">ลา: ${dayData.fullLeaveNames}</div>`;
                     }
                 }
 
                 cell.innerHTML = `
                     <div class="flex justify-between items-center">
-                        <span class="font-bold ${isToday ? 'text-blue-600' : 'text-gray-700'}">${day}</span>
-                        ${isToday ? '<span class="w-2 h-2 rounded-full bg-blue-600"></span>' : ''}
+                        <span class="font-bold ${isToday ? 'text-blue-400' : 'text-slate-200'}">${day}</span>
+                        ${isToday ? '<span class="w-2 h-2 rounded-full bg-blue-500"></span>' : ''}
                     </div>
                     <div class="space-y-1 overflow-hidden">
                         ${statusContent}
@@ -494,7 +479,6 @@
             renderCalendar();
         }
 
-        // Navigation Tabs Switcher
         function switchTab(tabName) {
             ['today', 'schedule', 'calendar', 'history'].forEach(tab => {
                 document.getElementById(`page-${tab}`).classList.add('hidden');
@@ -505,10 +489,8 @@
             document.getElementById(`tab-${tabName}`).classList.add('active-tab');
         }
 
-        // Initialize on Load
         document.addEventListener('DOMContentLoaded', () => {
             fetchData();
-            // Default view set to Today
             switchTab('today');
         });
     </script>
