@@ -3,32 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ตารางซ้อมทีม NEXER 22641</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <title>NEXER 22641 - Practice Schedule</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #4f46e5;
-      --primary-hover: #4338ca;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-      --cancel-color: #ef4444;
-      --normal-color: #10b981;
+      --bg-main: #0a0a0a;
+      --card-bg: #141414;
+      --card-border: #262626;
+      --accent-white: #ffffff;
+      --text-muted: #888888;
+      --highlight-gray: #1f1f1f;
+      --danger-red: #ff4d4d;
+      --warn-yellow: #ffb703;
+      --success-green: #00e676;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Kanit', sans-serif;
+      font-family: 'Prompt', sans-serif;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      padding: 20px;
+      background-color: var(--bg-main);
+      color: var(--accent-white);
+      padding: 24px 16px;
+      min-height: 100vh;
     }
 
     .container {
@@ -36,76 +37,180 @@
       margin: 0 auto;
     }
 
+    /* Header Cyber/Minimal Style */
     header {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 20px;
     }
 
-    h1 {
-      font-size: 2rem;
-      color: var(--primary-color);
-      margin-bottom: 8px;
+    .team-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, #ffffff 0%, #777777 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
     }
 
-    .subtitle {
+    .sub-title {
       color: var(--text-muted);
       font-size: 0.95rem;
+      letter-spacing: 1px;
     }
 
+    /* Today Highlight Card */
+    .today-hero {
+      background: var(--card-bg);
+      border: 1px solid var(--accent-white);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .today-hero::before {
+      content: "TODAY's STATUS";
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    .today-date {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .today-badge {
+      background: var(--accent-white);
+      color: var(--bg-main);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .today-status {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: #00e676;
+    }
+
+    .today-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 15px;
+    }
+
+    .leave-box {
+      background: var(--highlight-gray);
+      border-left: 3px solid var(--accent-white);
+      padding: 12px 16px;
+      border-radius: 6px;
+    }
+
+    .leave-box.full { border-left-color: var(--danger-red); }
+    .leave-box.part { border-left-color: var(--warn-yellow); }
+
+    .leave-box h4 {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .leave-box .names {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .leave-box .notes {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-top: 4px;
+    }
+
+    /* Navigation Tabs */
     .nav-tabs {
       display: flex;
       justify-content: center;
-      gap: 12px;
-      margin-bottom: 25px;
+      gap: 16px;
+      margin-bottom: 24px;
     }
 
     .tab-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
       padding: 10px 24px;
-      border: 2px solid var(--primary-color);
-      background-color: transparent;
-      color: var(--primary-color);
-      font-weight: 600;
       border-radius: 30px;
+      font-size: 0.95rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 1rem;
+      transition: all 0.25s ease;
     }
 
-    .tab-btn.active, .tab-btn:hover {
-      background-color: var(--primary-color);
-      color: #fff;
+    .tab-btn:hover {
+      border-color: var(--accent-white);
+      color: var(--accent-white);
     }
 
-    .status-bar {
+    .tab-btn.active {
+      background: var(--accent-white);
+      color: var(--bg-main);
+      border-color: var(--accent-white);
+    }
+
+    /* Controls Bar */
+    .controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
-      background: var(--card-bg);
-      padding: 12px 20px;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
     }
 
     .refresh-btn {
-      background-color: #eceff1;
-      border: none;
-      padding: 6px 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--accent-white);
+      padding: 8px 16px;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: 500;
-      color: var(--text-main);
+      font-size: 0.85rem;
+      transition: background 0.2s;
     }
 
     .refresh-btn:hover {
-      background-color: #cfd8dc;
+      background: var(--highlight-gray);
     }
 
-    .table-container {
+    /* Table Design */
+    .table-wrap {
       background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 12px;
       overflow-x: auto;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
     }
 
     table {
@@ -115,75 +220,59 @@
     }
 
     th, td {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border-color);
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.9rem;
       vertical-align: top;
-      font-size: 0.92rem;
     }
 
     th {
-      background-color: #f1f5f9;
-      color: var(--text-main);
+      background-color: #0f0f0f;
+      color: var(--text-muted);
       font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
       white-space: nowrap;
     }
 
+    tr:last-child td {
+      border-bottom: none;
+    }
+
     tr:hover {
-      background-color: #f8fafc;
+      background-color: var(--highlight-gray);
     }
 
-    .badge-today {
-      background-color: #fef3c7;
-      color: #d97706;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-left: 6px;
-    }
-
-    .status-cancel {
-      color: var(--cancel-color);
+    .badge-cancel {
+      color: var(--danger-red);
       font-weight: 600;
     }
 
-    .status-normal {
-      color: var(--normal-color);
-      font-weight: 600;
+    .text-part-time {
+      color: var(--warn-yellow);
     }
 
-    .absent-name {
-      color: #dc2626;
-      font-weight: 500;
+    .text-full-time {
+      color: var(--danger-red);
     }
 
-    .time-absent {
-      color: #d97706;
-      font-weight: 500;
-    }
-
-    .note-text {
+    .note-sub {
+      font-size: 0.82rem;
       color: var(--text-muted);
-      font-size: 0.85rem;
       margin-top: 4px;
     }
 
-    .loading {
+    .loading-state, .empty-state {
       text-align: center;
       padding: 40px;
-      color: var(--text-muted);
-      font-size: 1.1rem;
-    }
-
-    .empty-msg {
-      text-align: center;
-      padding: 30px;
       color: var(--text-muted);
     }
 
     @media (max-width: 768px) {
-      body { padding: 10px; }
-      th, td { padding: 10px 12px; font-size: 0.85rem; }
+      .team-title { font-size: 2rem; }
+      body { padding: 16px 8px; }
+      th, td { padding: 12px; font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -191,32 +280,46 @@
 
   <div class="container">
     <header>
-      <h1>ตารางซ้อมทีม NEXER 22641</h1>
-      <div class="subtitle">อัปเดตข้อมูล Real-time จาก Google Sheet</div>
+      <div class="team-title">NEXER 22641</div>
+      <div class="sub-title">REAL-TIME PRACTICE SCHEDULE</div>
     </header>
 
+    <!-- Today Summary Panel -->
+    <div id="today-panel" class="today-hero">
+      <div class="today-date">
+        <span id="today-date-text">กำลังโหลด...</span>
+        <span class="today-badge">TODAY</span>
+      </div>
+      <div id="today-status-text" class="today-status">-</div>
+      <div class="today-grid" id="today-leave-details">
+        <!-- JS will populate leave details for today -->
+      </div>
+    </div>
+
+    <!-- Page Switcher -->
     <div class="nav-tabs">
-      <button class="tab-btn active" onclick="switchPage('upcoming')">📅 ตารางซ้อม (ปัจจุบัน/อนาคต)</button>
-      <button class="tab-btn" onclick="switchPage('history')">📜 ประวัติการซ้อม (History)</button>
+      <button class="tab-btn active" onclick="switchTab('upcoming')">📅 ตารางซ้อมปัจจุบัน/อนาคต</button>
+      <button class="tab-btn" onclick="switchTab('history')">📜 ประวัติการซ้อม (History)</button>
     </div>
 
-    <div class="status-bar">
-      <span id="page-title">ตารางซ้อมปัจจุบัน/อนาคต</span>
-      <button class="refresh-btn" onclick="fetchSheetData()">🔄 อัปเดตข้อมูล</button>
+    <div class="controls">
+      <div id="view-title" class="section-title">SCHEDULE</div>
+      <button class="refresh-btn" onclick="loadData()">🔄 Refresh Data</button>
     </div>
 
-    <div class="table-container">
-      <div id="loading" class="loading">กำลังโหลดข้อมูลตารางซ้อม...</div>
-      <table id="schedule-table" style="display: none;">
+    <!-- Main Table -->
+    <div class="table-wrap">
+      <div id="loading" class="loading-state">FETCHING DATA FROM GOOGLE SHEETS...</div>
+      <table id="main-table" style="display: none;">
         <thead>
           <tr>
             <th>วันที่</th>
             <th>วัน</th>
-            <th>สถานะ / เวลาซ้อม</th>
+            <th>สถานะการซ้อม</th>
             <th>ผู้ลา (ทั้งวัน)</th>
-            <th>หมายเหตุ (ทั้งวัน)</th>
+            <th>หมายเหตุ</th>
             <th>ผู้ลา (เจาะจงเวลา)</th>
-            <th>หมายเหตุ (เจาะจงเวลา)</th>
+            <th>หมายเหตุ</th>
           </tr>
         </thead>
         <tbody id="table-body"></tbody>
@@ -225,167 +328,178 @@
   </div>
 
   <script>
-    // URL Google Sheet CSV Export
     const SHEET_ID = '1T1CSPLRSY6X1RDMv3feAFZ0hSMVFSjOz8nWOjkjjjcE';
     const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
-    // ตัวแปรเก็บข้อมูล
-    let allData = [];
-    let currentPage = 'upcoming'; // 'upcoming' หรือ 'history'
+    let allRows = [];
+    let currentTab = 'upcoming';
 
-    // แปลงชื่อเดือนภาษาไทยเป็น index (0-11)
-    const monthMap = {
+    const thaiMonths = {
       'ม.ค.': 0, 'ก.พ.': 1, 'มี.ค.': 2, 'เม.ย.': 3,
       'พ.ค.': 4, 'มิ.ย.': 5, 'ก.ค.': 6, 'ส.ค.': 7,
       'ก.ย.': 8, 'ต.ค.': 9, 'พ.ย.': 10, 'ธ.ค.': 11
     };
 
-    // แปลงข้อความ "28 ก.ย. 69" เป็น Date Object
     function parseThaiDate(str) {
       if (!str) return null;
-      const parts = str.trim().split(/\s+/);
-      if (parts.length < 3) return null;
+      const clean = str.trim().split(/\s+/);
+      if (clean.length < 3) return null;
 
-      const day = parseInt(parts[0], 10);
-      const monthStr = parts[1];
-      const yearBE = parseInt(parts[2], 10);
+      const day = parseInt(clean[0], 10);
+      const monthIndex = thaiMonths[clean[1]];
+      let yearBE = parseInt(clean[2], 10);
+      if (yearBE < 100) yearBE += 2500;
+      const yearAD = yearBE - 543;
 
-      const month = monthMap[monthStr];
-      // แปลงปี พ.ศ. (เลขท้าย 2 หลัก เช่น 69) เป็น ค.ศ.
-      const yearAD = 2000 + yearBE - 543;
-
-      if (isNaN(day) || month === undefined || isNaN(yearAD)) return null;
-      return new Date(yearAD, month, day);
+      if (isNaN(day) || monthIndex === undefined || isNaN(yearAD)) return null;
+      return new Date(yearAD, monthIndex, day);
     }
 
-    // แปลง CSV เป็น Array
     function parseCSV(text) {
       const lines = text.split('\n');
-      const result = [];
-      
+      const data = [];
+
       for (let i = 1; i < lines.length; i++) {
         if (!lines[i].trim()) continue;
-        
-        // แยกฟิลด์ด้วย Regex ที่รองรับเครื่องหมายอัญประกาศ "..."
-        const row = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-        const cleanRow = row.map(cell => cell.replace(/^"|"$/g, '').trim());
+        const matches = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
+        const clean = matches.map(m => m.replace(/^"|"$/g, '').trim());
 
-        if (cleanRow.length >= 3 && cleanRow[0]) {
-          result.push({
-            dateStr: cleanRow[0] || '',
-            dayOfWeek: cleanRow[1] || '',
-            status: cleanRow[2] || '',
-            fullLeaveNames: cleanRow[3] || '',
-            fullLeaveNotes: cleanRow[4] || '',
-            partLeaveNames: cleanRow[5] || '',
-            partLeaveNotes: cleanRow[6] || '',
-            dateObj: parseThaiDate(cleanRow[0])
+        if (clean[0]) {
+          data.push({
+            dateStr: clean[0] || '',
+            dayOfWeek: clean[1] || '',
+            status: clean[2] || '',
+            fullLeaveNames: clean[3] || '',
+            fullLeaveNotes: clean[4] || '',
+            partLeaveNames: clean[5] || '',
+            partLeaveNotes: clean[6] || '',
+            dateObj: parseThaiDate(clean[0])
           });
         }
       }
-      return result;
+      return data;
     }
 
-    // ดึงข้อมูลจาก Google Sheet
-    async function fetchSheetData() {
+    async function loadData() {
       document.getElementById('loading').style.display = 'block';
-      document.getElementById('schedule-table').style.display = 'none';
+      document.getElementById('main-table').style.display = 'none';
 
       try {
-        const res = await fetch(CSV_URL);
-        const csvText = await res.text();
-        allData = parseCSV(csvText);
+        const response = await fetch(CSV_URL);
+        const text = await response.text();
+        allRows = parseCSV(text);
+        renderTodayHero();
         renderTable();
       } catch (err) {
-        document.getElementById('loading').innerHTML = '❌ เกิดข้อผิดพลาดในการโหลดข้อมูล';
+        document.getElementById('loading').innerText = '❌ FAILED TO LOAD SCHEDULE DATA';
         console.error(err);
       }
     }
 
-    // แสดงผลข้อมูลในตาราง
+    function renderTodayHero() {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      const todayData = allRows.find(row => row.dateObj && row.dateObj.getTime() === today.getTime());
+      const leaveContainer = document.getElementById('today-leave-details');
+
+      if (todayData) {
+        document.getElementById('today-date-text').innerText = `${todayData.dateStr} (${todayData.dayOfWeek})`;
+        document.getElementById('today-status-text').innerText = `สถานะ: ${todayData.status || 'มีการซ้อมปกติ'}`;
+        
+        let html = '';
+        if (todayData.fullLeaveNames) {
+          html += `
+            <div class="leave-box full">
+              <h4>⛔ ลาทั้งวัน</h4>
+              <div class="names text-full-time">${todayData.fullLeaveNames}</div>
+              <div class="notes">${todayData.fullLeaveNotes || '-'}</div>
+            </div>`;
+        }
+        if (todayData.partLeaveNames) {
+          html += `
+            <div class="leave-box part">
+              <h4>⏳ ลาบางช่วงเวลา</h4>
+              <div class="names text-part-time">${todayData.partLeaveNames}</div>
+              <div class="notes">${todayData.partLeaveNotes || '-'}</div>
+            </div>`;
+        }
+
+        if (!todayData.fullLeaveNames && !todayData.partLeaveNames) {
+          html = '<div style="color: var(--text-muted);">🎉 วันนี้ไม่มีแจ้งลาเพิ่มเติม</div>';
+        }
+
+        leaveContainer.innerHTML = html;
+      } else {
+        document.getElementById('today-date-text').innerText = 'วันนี้ไม่มีตารางในระบบ';
+        document.getElementById('today-status-text').innerText = '-';
+        leaveContainer.innerHTML = '<div style="color: var(--text-muted);">ไม่มีข้อมูลสำหรับวันนี้</div>';
+      }
+    }
+
     function renderTable() {
       const tbody = document.getElementById('table-body');
       tbody.innerHTML = '';
 
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      today.setHours(0,0,0,0);
 
-      // กรองข้อมูลแยกตามประเภท
-      const filteredData = allData.filter(item => {
-        if (!item.dateObj) return true; // หากแปลงวันที่ไม่ได้ ให้แสดงไว้ก่อน
-        
-        if (currentPage === 'upcoming') {
-          return item.dateObj >= today; // ตั้งแต่วันนี้เป็นต้นไป
-        } else {
-          return item.dateObj < today;  // วันที่ผ่านมาแล้ว
-        }
+      // กรองข้อมูล: ปัจจุบัน/อนาคต (รวมวันนี้) VS ประวัติ (ก่อนวันนี้)
+      const filtered = allRows.filter(row => {
+        if (!row.dateObj) return true;
+        return currentTab === 'upcoming' ? row.dateObj >= today : row.dateObj < today;
       });
 
-      // จัดเรียงวันที่
-      filteredData.sort((a, b) => {
+      filtered.sort((a,b) => {
         if (!a.dateObj || !b.dateObj) return 0;
-        return currentPage === 'upcoming' ? a.dateObj - b.dateObj : b.dateObj - a.dateObj;
+        return currentTab === 'upcoming' ? a.dateObj - b.dateObj : b.dateObj - a.dateObj;
       });
 
       document.getElementById('loading').style.display = 'none';
-      
-      if (filteredData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-msg">ไม่มีรายการข้อมูลในหมวดหมู่นี้</td></tr>`;
-      } else {
-        filteredData.forEach(item => {
-          const tr = document.createElement('tr');
-          
-          let isToday = false;
-          if (item.dateObj) {
-            isToday = item.dateObj.getTime() === today.getTime();
-          }
 
-          // จัดรูปแบบสีสถานะ
-          let statusStyle = '';
-          if (item.status.includes('งดซ้อม')) {
-            statusStyle = 'class="status-cancel"';
-          } else if (item.status) {
-            statusStyle = 'class="status-normal"';
-          }
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">NO SCHEDULE FOUND IN THIS SECTION</td></tr>`;
+      } else {
+        filtered.forEach(row => {
+          const tr = document.createElement('tr');
+          const isToday = row.dateObj && row.dateObj.getTime() === today.getTime();
+
+          let statusClass = row.status.includes('งดซ้อม') ? 'class="badge-cancel"' : '';
 
           tr.innerHTML = `
             <td>
-              <strong>${item.dateStr}</strong>
-              ${isToday ? '<span class="badge-today">วันนี้</span>' : ''}
+              <strong>${row.dateStr}</strong>
+              ${isToday ? ' <span class="today-badge">TODAY</span>' : ''}
             </td>
-            <td>${item.dayOfWeek}</td>
-            <td ${statusStyle}>${item.status || '-'}</td>
-            <td class="absent-name">${item.fullLeaveNames || '-'}</td>
-            <td class="note-text">${item.fullLeaveNotes || '-'}</td>
-            <td class="time-absent">${item.partLeaveNames || '-'}</td>
-            <td class="note-text">${item.partLeaveNotes || '-'}</td>
+            <td>${row.dayOfWeek}</td>
+            <td ${statusClass}>${row.status || '-'}</td>
+            <td class="text-full-time">${row.fullLeaveNames || '-'}</td>
+            <td class="note-sub">${row.fullLeaveNotes || '-'}</td>
+            <td class="text-part-time">${row.partLeaveNames || '-'}</td>
+            <td class="note-sub">${row.partLeaveNotes || '-'}</td>
           `;
           tbody.appendChild(tr);
         });
       }
 
-      document.getElementById('schedule-table').style.display = 'table';
+      document.getElementById('main-table').style.display = 'table';
     }
 
-    // สลับหน้า (ตารางซ้อม / ประวัติ)
-    function switchPage(page) {
-      currentPage = page;
-      const btns = document.querySelectorAll('.tab-btn');
-      btns.forEach(btn => btn.classList.remove('active'));
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
-      if (page === 'upcoming') {
-        btns[0].classList.add('active');
-        document.getElementById('page-title').innerText = 'ตารางซ้อมปัจจุบัน/อนาคต';
+      if (tab === 'upcoming') {
+        event.target.classList.add('active');
+        document.getElementById('view-title').innerText = 'UPCOMING SCHEDULE';
       } else {
-        btns[1].classList.add('active');
-        document.getElementById('page-title').innerText = 'ประวัติการซ้อม (History)';
+        event.target.classList.add('active');
+        document.getElementById('view-title').innerText = 'PRACTICE HISTORY';
       }
-
       renderTable();
     }
 
-    // โหลดข้อมูลเมื่อเปิดหน้าเว็บ
-    fetchSheetData();
+    loadData();
   </script>
 </body>
 </html>
